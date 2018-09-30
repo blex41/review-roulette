@@ -32,7 +32,7 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
 
 Pour pouvoir utiliser ce code, vous devez d'abord créer une application sur votre compte Slack, en vous rendant [ici](https://api.slack.com/apps) et en cliquant sur **Create New App**. Choisissez un nom et l'espace de travail sur lequel vous souhaitez la tester.
 
-#### Activer les actions
+### Activer les actions
 
 Une fois votre application créée, vous devriez être redirigé vers une page **Basic Information**, et voir **Add features and functionality**.
 
@@ -44,7 +44,7 @@ http(s)://{nom_de_domaine_ou_ip}/{sous_dossier/}action
 
 > Remplacez `nom_de_domaine_ou_ip` par le votre, où Slack pourra le trouver lorsqu'il fera ses appels. `sous_dossier` peut être vide si vous comptez lancer l'application à la racine de votre site. `action` est une route configurée dans le code. Une fois que c'est fait, validez.
 
-#### Activer les commandes _slash_
+### Activer les commandes _slash_
 
 Dans le menu de gauche, sous **Features**, choisissez **Slash Commands**. Sur l'écran suivant, cliquez sur **Create New Command**. Entrez cette configuration et validez :
 
@@ -56,7 +56,7 @@ Dans le menu de gauche, sous **Features**, choisissez **Slash Commands**. Sur l'
 
 > La route `command` est configurée dans le code.
 
-#### Activer l'authentification OAuth
+### Activer l'authentification OAuth
 
 Afin d'ouvrir des boîtes de dialogues, nous avons également besoin d'authentifier notre application sur les espaces de travail. Cliquez sur **OAuth & Permissions**, et ajoutez cette URL en cliquant sur **Add New Redirect URL** :
 
