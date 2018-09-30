@@ -13,6 +13,19 @@ server.use(
 );
 
 /**
+ * Returns the installation link
+ */
+server.get(`${config.baseUrl}/install-link`, (req, res) => {
+  res.send(
+    `https://slack.com/oauth/authorize?scope=commands&client_id=${
+      config.client_id
+    }&redirect_uri=${encodeURIComponent(
+      `${config.siteUrl}${config.baseUrl}/install`
+    )}`
+  );
+});
+
+/**
  * Users are redirected here during installation on a workspace
  */
 server.get(`${config.baseUrl}/install`, app.install);

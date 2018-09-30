@@ -2,14 +2,15 @@
  * The './env.json' file should look like this (fake example):
 {
   "client_id": "123456789012.123456789012",
-  "client_secret": "0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d"
+  "client_secret": "0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d",
+  "siteUrl": "https://example.com",
+  "baseUrl": "/subfolder",
+  "port": 80
 }
  */
 const appInfo = require("./env.json");
 
 module.exports = {
-  port: 3005,
-  baseUrl: "",
   ...appInfo,
   // One of these will be displayed below a request for review
   gifs: [

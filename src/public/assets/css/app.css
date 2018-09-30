@@ -1,0 +1,23 @@
+body {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  font-family: "Khula", Arial, Helvetica, sans-serif;
+}
+
+#logo {
+  display: inline-block;
+  margin-top: 2rem;
+  width: 5rem;
+  height: 5rem;
+  background-image: url("../../r_icon.jpg");
+  background-size: 100% 100%;
+}
+
+.code {
+  display: inline-block;
+  font-family: monospace;
+  background: #f1f1f1;
+}

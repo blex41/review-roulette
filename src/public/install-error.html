@@ -20,31 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Review roulette</title>
   <link href="https://fonts.googleapis.com/css?family=Khula:800|Roboto:400,400i" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Roboto', Arial, Helvetica, sans-serif;
-      text-align: center;
-    }
-
-    h1 {
-      font-family: 'Khula', Arial, Helvetica, sans-serif;
-    }
-
-    #logo {
-      display: inline-block;
-      margin-top: 2rem;
-      width: 5rem;
-      height: 5rem;
-      background-image: url('./r_icon.jpg');
-      background-size: 100% 100%;
-    }
-
-    .code {
-      display: inline-block;
-      font-family: monospace;
-      background: #f1f1f1
-    }
-  </style>
+  <link rel="stylesheet" href="./assets/css/app.css">
 </head>
 
 <body>
@@ -53,11 +29,10 @@
 
 
   <p>Une erreur s'est produite pendant l'installation... Réessayez&nbsp;:</p>
-  <p>
-    <a href="https://slack.com/oauth/authorize?scope=commands&client_id=424346983622.445158495204&redirect_uri=https%3A%2F%2Freview-roulette.alexandreleveque.fr%2Finstall"><img
-        alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
-      /></a>
-  </p>
+
+  <div class="installButton"></div>
+
+  <script src="./assets/js/app.js"></script>
 </body>
 
 </html>
