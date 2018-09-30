@@ -28,6 +28,11 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
 
 ## Installation et développement
 
+* [Création d'une application Slack](#1-création-dune-application-slack)
+* [Configuration du serveur](#2-configuration-du-serveur)
+* [Lancement de l'application](#3-lancement-de-lapplication)
+* [Distribution](#4-distribution)
+
 ### 1. Création d'une application Slack
 
 Pour pouvoir utiliser ce code, vous devez d'abord créer une application sur votre compte Slack, en vous rendant [ici](https://api.slack.com/apps) et en cliquant sur **Create New App**. Choisissez un nom et l'espace de travail sur lequel vous souhaitez la tester.
