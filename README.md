@@ -116,4 +116,4 @@ Cliquez sur le bouton pour l'installer dans votre espace de travail Slack, et é
 
 ### 4. Distribution
 
-Votre application est maintenant disponible sur votre espace de travail de développement. Pour pouvoir la distribuer sur d'autres, il faut remplir certaines conditions (https notamment). Pour plus d'informations, retournez sur le site de gestion de vos apps Slack, et allez dans **Manage Distribution**.
+Votre application est maintenant disponible sur votre espace de travail de développement. Vous avez maintenant le choix entre faire une pull request sur ce repo, ou en faire votre propre application. Pour pouvoir la distribuer sur d'autres espaces de travail, il faut remplir certaines conditions (https notamment). Pour plus d'informations, retournez sur le site de gestion de vos apps Slack, et allez dans **Manage Distribution**.
