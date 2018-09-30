@@ -22,13 +22,13 @@ module.exports = {
     "https://media.giphy.com/media/BtedgmzGNCiuk/giphy.gif",
     // Judge Judy
     "https://media.giphy.com/media/Emg9qPKR5hquI/giphy.gif",
-    // The Office Party
-    "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
     // Boy meets world
     "https://media.giphy.com/media/SCRqBAU2nNUuQ/giphy.gif",
-    // Novak Jokovic
-    "https://media.giphy.com/media/627nnLvptNQjaZ5qP9/giphy.gif",
-    // Star Trek
-    "https://media.giphy.com/media/QgixZj4y3TwnS/giphy.gif"
+    // Dicaprio
+    "https://media.giphy.com/media/Cj3Ce7e8h2EKY/giphy.gif",
+    // Obama
+    "https://media.giphy.com/media/l0ErBTfnwCom6mFPi/giphy.gif",
+    // Robocop
+    "https://media.giphy.com/media/U8bDgsXcnIEFy/giphy.gif"
   ]
 };
