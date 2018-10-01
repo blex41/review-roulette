@@ -20,7 +20,12 @@ const requestReview = async payload => {
   );
   utils.sendDelayedResponse(
     payload,
-    messages.ASK_FOR_REVIEW(askingUser, candidates, payload.submission.message)
+    messages.ASK_FOR_REVIEW(
+      askingUser,
+      candidates,
+      payload.submission.message,
+      payload.submission.add_gif
+    )
   );
 };
 
@@ -36,6 +41,22 @@ const getRequestDialogConfiguration = (triggerId, maxReviewers) => {
       label: "Message",
       hint: "Lien vers la merge request, informations complémentaires...",
       name: "message"
+    },
+    {
+      type: "select",
+      label: "Ajouter un GIF sous la demande",
+      name: "add_gif",
+      value: "no",
+      options: [
+        {
+          label: "Non",
+          value: "no"
+        },
+        {
+          label: "Oui",
+          value: "yes"
+        }
+      ]
     }
   ];
   // If there is more than one reviewer available,

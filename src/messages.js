@@ -113,7 +113,7 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
     text:
       ":frowning: Une erreur s'est produite lors de l'ouverture du formulaire..."
   },
-  ASK_FOR_REVIEW(askingUser, candidates, message) {
+  ASK_FOR_REVIEW(askingUser, candidates, message, addGif) {
     const list = messages.TEXT_LIST_OF_CANDIDATES(candidates);
     let mainText;
     if (candidates.length === 1) {
@@ -121,18 +121,19 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
     } else {
       mainText = `:tada: ${list}, vous avez été choisis`;
     }
+    const attachments = [{ text: message }];
+    if (addGif === "yes") {
+      attachments.push({
+        title: "",
+        image_url: utils.getRandomGif(),
+        footer:
+          "Retrouve la liste des commandes disponibles avec /roulette help"
+      });
+    }
     return {
       response_type: "in_channel",
       text: `${mainText} aléatoirement pour faire une relecture, suite à une demande de <@${askingUser}> !`,
-      attachments: [
-        { text: message },
-        {
-          title: "",
-          image_url: utils.getRandomGif(),
-          footer:
-            "Retrouve la liste des commandes disponibles avec /roulette help"
-        }
-      ]
+      attachments: attachments
     };
   }
 };

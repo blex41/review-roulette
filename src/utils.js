@@ -47,7 +47,7 @@ const loadData = () => {
  */
 const backupData = data => {
   try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data));
+    fs.writeFileSync(dataFilePath, JSON.stringify(data, 0, 2));
   } catch (e) {
     console.error("An error occurred during data backup.", e);
   }
