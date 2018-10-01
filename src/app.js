@@ -44,7 +44,7 @@ const getRequestDialogConfiguration = (triggerId, maxReviewers) => {
     },
     {
       type: "select",
-      label: "Ajouter un GIF sous la demande",
+      label: "Ajouter un GIF",
       name: "add_gif",
       value: "no",
       options: [
