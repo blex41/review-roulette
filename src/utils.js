@@ -24,6 +24,14 @@ const extractUserEntities = str => {
 };
 
 /**
+ * Returns an group found in a command
+ * @param {string} str
+ */
+const extractGroup = str => {
+  return str.replace(/<@.*>/g, '').trim().split(" ")[1];
+};
+
+/**
  * Loads the data file and returns its contents
  */
 const loadData = () => {
@@ -84,47 +92,29 @@ const callSlackMethod = async (method, data, options = {}) => {
 };
 
 /**
- * Randomly selects an item in an array,
- * making sure every item is only picked once per round
+ * Randomly selects an item in an array not in the other array
+ * @param {*} arrayToPick
+ * @param {*} arrayToExclude
  */
-const getRandomIn = (() => {
-  const cachedArrays = [];
-  const chosenValues = [];
-
-  return arr => {
-    let cachedArrayIndex = cachedArrays.findIndex(a => a === arr);
-    let remainingChoices;
-    if (cachedArrayIndex > -1) {
-      if (chosenValues[cachedArrayIndex].length >= arr.length) {
-        chosenValues[cachedArrayIndex] = [];
-      }
-      remainingChoices = _difference(arr, chosenValues[cachedArrayIndex]);
+const getRandomIn = (arrayToPick, arrayToExclude) => {
+    if (!arrayToPick.length) {
+      return undefined;
     } else {
-      cachedArrayIndex = cachedArrays.length;
-      cachedArrays.push(arr);
-      chosenValues.push([]);
-      remainingChoices = arr;
-    }
-    if (!remainingChoices.length) {
-      return null;
-    } else {
-      const choice =
-        remainingChoices[Math.floor(Math.random() * remainingChoices.length)];
-      chosenValues[cachedArrayIndex].push(choice);
-      return choice;
+      const chosenValues = _difference(arrayToPick, arrayToExclude);
+      return chosenValues[Math.floor(Math.random() * chosenValues.length)];
     }
   };
-})();
 
 /**
  * Returns a random Gif from the configuration file
  */
 const getRandomGif = () => {
-  return config.gifs.length ? getRandomIn(config.gifs) : null;
+  return config.gifs.length ? config.gifs[Math.floor(Math.random() * config.gifs.length)] : null;
 };
 
 module.exports = {
   extractUserEntities,
+  extractGroup,
   loadData,
   backupData,
   sendDelayedResponse,
