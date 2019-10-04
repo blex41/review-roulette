@@ -12,11 +12,13 @@ const requestReview = async payload => {
   const channelId = payload.channel.id;
   const askingUser = payload.user.id;
   const count = payload.submission.review_count || 1;
+  const group = payload.submission.group || "all";
   const candidates = roulette.selectRandomCandidates(
     teamId,
     channelId,
     askingUser,
-    count
+    count,
+    group
   );
   utils.sendDelayedResponse(
     payload,
@@ -24,7 +26,8 @@ const requestReview = async payload => {
       askingUser,
       candidates,
       payload.submission.message,
-      payload.submission.add_gif
+      payload.submission.add_gif,
+      group
     )
   );
 };
@@ -33,8 +36,9 @@ const requestReview = async payload => {
  * Returns a form configuration for requesting a review
  * @param {string} triggerId
  * @param {int} maxReviewers
+ * @param {array} groups
  */
-const getRequestDialogConfiguration = (triggerId, maxReviewers) => {
+const getRequestDialogConfiguration = (triggerId, maxReviewers, groups) => {
   const elements = [
     {
       type: "textarea",
@@ -77,6 +81,24 @@ const getRequestDialogConfiguration = (triggerId, maxReviewers) => {
       options: options
     });
   }
+  // If there is more than one group of reviewers available,
+  // allow the user to choose the group
+  if (groups.length > 0) {
+    const options = [{label:"Tous", value: "all"}];
+    groups.forEach(g =>
+      options.push({
+        label: g,
+        value: g
+      })
+    );
+    elements.unshift({
+      type: "select",
+      label: "Groupe",
+      name: "group",
+      value: "all",
+      options: options
+    });
+  }
 
   return {
     trigger_id: triggerId,
@@ -97,12 +119,20 @@ const openRequestDialog = async (req, res) => {
     req.body.channel_id,
     req.body.user_id
   );
+
+  const groups = roulette.getGroups(
+      req.body.team_id,
+      req.body.channel_id,
+      req.body.user_id
+  );
+
   if (!maxReviewers) {
     res.send(messages.ERROR_NOT_ENOUGH_REVIEWERS);
   } else {
     const dialogConfig = getRequestDialogConfiguration(
       req.body.trigger_id,
-      maxReviewers
+      maxReviewers,
+        groups
     );
     try {
       const bearer = roulette.getBearer(req.body.team_id);
@@ -140,7 +170,7 @@ const listCandidates = (req, res) => {
 const addCandidates = (req, res) => {
   const candidates = utils.extractUserEntities(req.body.text);
   if (candidates.length) {
-    roulette.addCandidates(req.body.team_id, req.body.channel_id, candidates);
+    roulette.addCandidatesToGroups(req.body.team_id, req.body.channel_id, candidates, []);
     res.send();
     // We're sending a delayed response to avoid showing the command in the conversation
     utils.sendDelayedResponse(
@@ -149,6 +179,27 @@ const addCandidates = (req, res) => {
     );
   } else {
     res.send(messages.ERROR_NO_CANDIDATES_TO_ADD);
+  }
+};
+
+/**
+ * Adds candidates to a channel
+ */
+const addCandidatesToGroup = (req, res) => {
+  const candidates = utils.extractUserEntities(req.body.text);
+  const group = utils.extractGroup(req.body.text);
+  if (candidates.length && group) {
+    roulette.addCandidatesToGroups(req.body.team_id, req.body.channel_id, candidates, [group]);
+    res.send();
+    // We're sending a delayed response to avoid showing the command in the conversation
+    utils.sendDelayedResponse(
+        req.body,
+        messages.USER_ADDED_CANDIDATES_TO_GROUP(req.body.user_id, candidates, group)
+    );
+  } else if (!candidates.length) {
+    res.send(messages.ERROR_NO_CANDIDATES_TO_ADD_TO_GROUP);
+  } else {
+    res.send(messages.ERROR_NO_GROUP_TO_ADD_CANDIDATES_TO);
   }
 };
 
@@ -175,6 +226,32 @@ const removeCandidates = (req, res) => {
 };
 
 /**
+ * Removes candidates from a Group in a channel
+ */
+const removeCandidatesFromGroup = (req, res) => {
+  const candidates = utils.extractUserEntities(req.body.text);
+  const group = utils.extractGroup(req.body.text);
+  if (candidates.length && group) {
+    roulette.removeCandidatesFromGroups(
+        req.body.team_id,
+        req.body.channel_id,
+        candidates,
+        [group]
+    );
+    res.send();
+    // We're sending a delayed response to avoid showing the command in the conversation
+    utils.sendDelayedResponse(
+        req.body,
+        messages.USER_REMOVED_CANDIDATES_FROM_GROUP(req.body.user_id, candidates, group)
+    );
+  } else if (!candidates.length) {
+    res.send(messages.ERROR_NO_CANDIDATES_TO_REMOVE_FROM_GROUP);
+  } else {
+      res.send(messages.ERROR_NO_GROUP_TO_REMOVE_CANDIDATES_FROM);
+  }
+};
+
+/**
  * Displays the an "Unknown command" error to a user
  */
 const displayUnknownCommand = (req, res) => {
@@ -192,8 +269,12 @@ const processCommand = (req, res) => {
       return listCandidates(req, res);
     case "add":
       return addCandidates(req, res);
+    case "addtogroup":
+      return addCandidatesToGroup(req, res);
     case "rm":
       return removeCandidates(req, res);
+    case "rmfromgroup":
+      return removeCandidatesFromGroup(req, res);
     default:
       return displayUnknownCommand(req, res);
   }

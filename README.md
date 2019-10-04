@@ -20,6 +20,14 @@ Grâce à des commandes _slash_, vous pouvez sélectionner aléatoirement une ou
 
 > Retire des utilisateurs de la liste de relecteurs
 
+**/roulette addtogroup** _animals @tom @jerry_
+
+> Ajoute des utilisateurs à un groupe de relecteurs
+
+**/roulette rmfromgroup** _animals @tom @jerry_
+
+> Retire des utilisateurs d'un groupe relecteurs
+
 Une fois cette liste configurée, il suffit d'utiliser cette commande :
 
 **/roulette**

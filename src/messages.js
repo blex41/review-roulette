@@ -1,4 +1,5 @@
 const utils = require("./utils.js");
+const _get = require('lodash/get');
 
 const messages = {
   HELP: {
@@ -10,6 +11,12 @@ const messages = {
 
 >*/roulette add* _@tom @jerry_
 >Ajoute des utilisateurs à la liste de relecteurs
+
+>*/roulette addtogroup* animals _@tom @jerry_
+>Ajoute des utilisateurs dans un groupe de relecteurs
+
+>*/roulette rmfromgroup* animals _@tom @jerry_
+>Retire des utilisateurs d'un groupe de relecteurs
 
 >*/roulette rm* _@tom @jerry_
 >Retire des utilisateurs de la liste de relecteurs
@@ -32,7 +39,15 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
       } relecteur${plural} enregistré${plural} sur cette chaîne :`,
       attachments: [
         {
-          text: candidates.map(c => `- <@${c}>`).join("\n")
+          text: candidates.map(c => {
+
+            var groupsAsString = '';
+            if (c.groups.length > 0) {
+              groupsAsString = `(` + c.groups.join(", ")+ `)`;
+            }
+
+            return `- <@${c.name}> ${groupsAsString}`;
+          }).join("\n")
         }
       ]
     };
@@ -50,8 +65,15 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
       text: `<@${user}> a ajouté ${list} à la liste de relecteurs disponibles sur cette chaîne.`
     };
   },
+  USER_ADDED_CANDIDATES_TO_GROUP(user, candidates, group) {
+    const list = messages.TEXT_LIST_OF_CANDIDATES(candidates);
+    return {
+      response_type: "in_channel",
+      text: `<@${user}> a ajouté ${list} au groupe ${group}.`
+    };
+  },
   TEXT_LIST_OF_CANDIDATES(candidates) {
-    const arr = candidates.map(c => `<@${c}>`);
+    const arr = candidates.map(c => `<@${_get(c, 'name', c)}>`);
     if (candidates.length > 1) {
       return `${arr.slice(0, arr.length - 1).join(", ")} et ${
         arr.slice(-1)[0]
@@ -67,6 +89,13 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
       text: `<@${user}> a retiré ${list} de la liste de relecteurs disponibles sur cette chaîne.`
     };
   },
+  USER_REMOVED_CANDIDATES_FROM_GROUP(user, candidates, group) {
+    const list = messages.TEXT_LIST_OF_CANDIDATES(candidates);
+    return {
+      response_type: "in_channel",
+      text: `<@${user}> a retiré ${list} du groupe ${group}.`
+    };
+  },
   ERROR_NO_CANDIDATES_TO_ADD: {
     response_type: "ephemeral",
     text:
@@ -78,6 +107,28 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
       }
     ]
   },
+    ERROR_NO_CANDIDATES_TO_ADD_TO_GROUP: {
+        response_type: "ephemeral",
+        text:
+            ":woman-shrugging: Aucun relecteur à ajouter au groupe. Voici comment utiliser cette commande :",
+        attachments: [
+            {
+                text: "*/roulette addtogroup* animals _@tom @jerry_",
+                footer: "Besoin d'aide ? Essaye /roulette help"
+            }
+        ]
+    },
+    ERROR_NO_GROUP_TO_ADD_CANDIDATES_TO: {
+        response_type: "ephemeral",
+        text:
+            ":woman-shrugging: Aucun groupe dans lequel ajouter des relecteurs. Voici comment utiliser cette commande :",
+        attachments: [
+            {
+                text: "*/roulette addtogroup* animals _@tom @jerry_",
+                footer: "Besoin d'aide ? Essaye /roulette help"
+            }
+        ]
+    },
   ERROR_NO_CANDIDATES_TO_REMOVE: {
     response_type: "ephemeral",
     text:
@@ -89,6 +140,28 @@ Une fois cette liste configurée, il suffit d'utiliser cette commande :
       }
     ]
   },
+    ERROR_NO_CANDIDATES_TO_REMOVE_FROM_GROUP: {
+        response_type: "ephemeral",
+        text:
+            ":woman-shrugging: Aucun relecteur à retirer du groupe. Voici comment utiliser cette commande :",
+        attachments: [
+            {
+                text: "*/roulette rmfromgroup* animals _@tom @jerry_",
+                footer: "Besoin d'aide ? Essaye /roulette help"
+            }
+        ]
+    },
+    ERROR_NO_GROUP_TO_REMOVE_CANDIDATES_FROM: {
+        response_type: "ephemeral",
+        text:
+            ":woman-shrugging: Aucun groupe duquel retirer des relecteurs. Voici comment utiliser cette commande :",
+        attachments: [
+            {
+                text: "*/roulette rmfromgroup* animals _@tom @jerry_",
+                footer: "Besoin d'aide ? Essaye /roulette help"
+            }
+        ]
+    },
   ERROR_UNKNOWN_COMMAND: {
     response_type: "ephemeral",
     text: ":zany_face: Commande non reconnue...",
